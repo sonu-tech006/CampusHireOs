@@ -1,0 +1,6 @@
+{
+  "name": "CampusHire OS",
+  "description": "Smart College Placement Management Platform — One platform. Every opportunity. Streamline placements, applications, eligibility rules, and recruitment analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

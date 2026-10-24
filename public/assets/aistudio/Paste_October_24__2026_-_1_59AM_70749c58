@@ -1,0 +1,1263 @@
+# MASTER PROMPT: CampusHire OS — Smart College Placement Management Platform
+
+Act as a senior full-stack software architect, UI/UX designer, backend engineer, database architect, and security engineer. Build a complete, production-quality, modern college placement management platform called **CampusHire OS**.
+
+Do not build just a landing page or static UI. Build a working full-stack application with a real database, authentication, separate Admin and Student panels, working forms, eligibility validation, company management, applicant tracking, downloadable PDF reports, analytics, notifications, and realistic demo data.
+
+The application should look like a polished SaaS product that a real college placement cell could use.
+
+---
+
+# 1. Project Overview
+
+**Product name:** CampusHire OS  
+**Tagline:** One platform. Every opportunity.  
+**Purpose:** Manage college placements, company job openings, student profiles, eligibility criteria, applications, recruitment rounds, and placement analytics in one centralized platform.
+
+The application has two primary user roles:
+
+1. **Admin / Placement Officer**
+2. **Student**
+
+Use role-based access control so each user sees only the sections and actions permitted for their role.
+
+Recruiters can be added as an optional third role in a future-ready architecture, but the first version must fully implement the Admin and Student experiences.
+
+# 2. Required Technology Stack
+
+Use the following stack unless a genuine technical limitation requires an alternative.
+
+### Frontend
+- React with TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui components
+- Lucide icons
+- React Router
+- TanStack Query for API state
+- React Hook Form with Zod validation
+- Recharts for analytics and graphs
+- A reliable toast notification library
+
+### Backend
+- Node.js
+- Express.js
+- TypeScript
+- REST APIs
+- MongoDB Atlas
+- Mongoose
+- JWT authentication with secure cookie-based sessions where appropriate
+- bcrypt or Argon2 for password hashing
+- Role-based authorization middleware
+
+### Additional services
+- Cloudinary for student profile photos and company logos
+- PDF generation using a reliable PDF library such as PDFKit
+- Email notifications through a configurable provider
+- Optional Gemini API integration for useful AI features
+- Deployment support for Vercel and Render, with MongoDB Atlas as the database
+
+Do not hardcode API keys, database credentials, email credentials, or JWT secrets. Use environment variables and provide a complete `.env.example`.
+
+# 3. UI/UX and Branding
+
+Create a premium, modern, responsive interface inspired by well-designed SaaS dashboards.
+
+### Visual identity
+- Product name: CampusHire OS
+- Create a clean custom logo using a graduation-cap, briefcase, or opportunity-related symbol.
+- Use a professional indigo/blue primary palette with neutral backgrounds.
+- Add a theme switcher supporting light mode and dark mode.
+- Add selectable accent colors, such as blue, violet, emerald, and rose.
+- Save the user's theme and accent preference.
+- Use consistent typography, spacing, borders, shadows, and rounded cards.
+- Add subtle animations, hover effects, skeleton loaders, and polished transitions.
+- Include a collapsible sidebar and responsive mobile navigation.
+
+### Public pages
+- Landing page
+- Features section
+- How it works
+- Student and placement-cell benefits
+- Sign up
+- Login
+- Forgot password
+- Contact/help section
+
+### Design quality
+- Avoid generic, unfinished dashboard templates.
+- Avoid excessive gradients and unnecessary animations.
+- Use clear empty states, error states, success messages, and loading indicators.
+- Use accessible forms and buttons.
+- Ensure all navigation links and buttons perform their actual intended actions.
+
+# 4. Authentication and Account Creation
+
+Implement secure authentication for both Admin and Student accounts.
+
+### Student registration
+
+The registration form should collect:
+
+- Full name
+- Email address
+- Password and confirm password
+- Student ID / university roll number
+- College name
+- Department
+- Course / degree
+- Specialization
+- Graduation year / passing year
+- Current semester
+- Section
+- Gender, optional
+- Phone number, optional
+- Profile photo, optional at registration
+- 10th percentage
+- 10th passing year
+- 12th percentage
+- 12th passing year
+- Diploma details, if applicable
+- Current CGPA or percentage
+- Backlogs / active backlogs
+- Resume upload, optional initially
+
+Not every student follows the same educational path. Support diploma and other applicable academic backgrounds without forcing irrelevant fields.
+
+Validate all data on both the frontend and backend.
+
+Requirements:
+- Unique email address.
+- Unique student ID within the institution.
+- Proper email and percentage validation.
+- Graduation year must be valid.
+- Passwords must be securely hashed.
+- Students must never be able to assign themselves the Admin role.
+- Prevent duplicate registrations.
+- Provide clear field-level error messages.
+
+### Admin account creation
+
+Admin access must be secure.
+
+- Admin accounts should be created through a controlled setup process or by an existing authorized administrator.
+- Do not allow public registration to create an Admin account.
+- Support role-based authorization and account deactivation.
+- Provide a secure initial admin seeding procedure.
+
+# 5. Student Panel
+
+Create a complete student dashboard with the following sections.
+
+## A. Student dashboard
+
+Show:
+- Welcome message with the student's name.
+- Profile completion percentage.
+- Total available companies.
+- Eligible opportunities.
+- Applications submitted.
+- Applications under review.
+- Shortlisted applications.
+- Upcoming interviews.
+- Upcoming application deadlines.
+- Recently added companies.
+- Recent application activity.
+
+Use cards and useful visualizations instead of presenting everything as plain text.
+
+## B. Student profile
+
+Create a detailed profile page containing all registered academic and personal information.
+
+Sections:
+1. Personal information
+2. Profile photo
+3. Contact information
+4. College and academic details
+5. 10th and 12th academic records
+6. Degree and specialization
+7. CGPA / percentage
+8. Graduation year and section
+9. Backlogs
+10. Skills
+11. Projects
+12. Internship and work experience
+13. Certifications
+14. Resume
+15. Links to GitHub, LinkedIn, and portfolio
+
+Students should be able to:
+- Edit their information.
+- Upload, replace, or remove their profile photo.
+- Update academic details when permitted.
+- Add projects, skills, certifications, and experience.
+- Upload and replace their resume.
+- Preview their profile.
+- See which required profile fields are incomplete.
+
+For security and data integrity, changes to critical identity fields such as the student ID or registered email should follow a controlled verification process.
+
+Use Cloudinary or another configured storage service for images. Validate file type and size on the server. Never store uploaded files using arbitrary executable paths.
+
+## C. Browse companies and jobs
+
+Create a dedicated opportunities page displaying all published placement opportunities.
+
+Each company card should show:
+- Company logo
+- Company name
+- Job title
+- Job type: Internship, Full-Time, Trainee, or Internship-to-PPO
+- Location
+- Work mode: On-site, Hybrid, or Remote
+- Eligible courses
+- Eligible branches / specializations
+- Minimum CGPA or percentage
+- Graduation-year requirements
+- Salary / stipend, when disclosed
+- Application deadline
+- Number of interested students, if enabled by the institution
+- Application status for the current student
+
+Add:
+- Search by company and job title
+- Filter by branch, specialization, graduation year, location, job type, and eligibility
+- Sort by newest, deadline, company name, and relevant opportunities
+- Tabs for All Opportunities, Eligible for Me, Applied, Shortlisted, and Closed
+- Pagination or efficient infinite scrolling
+
+Students should be able to open any published opportunity to view the full details.
+
+## D. Company and job details page
+
+Every opportunity must have a detailed page showing:
+
+### Company information
+- Company name
+- Company logo
+- About the company
+- Industry
+- Official website
+- Company location
+- Work mode
+- HR / placement contact information, if authorized for display
+
+### Job information
+- Job title
+- Complete job description
+- Roles and responsibilities
+- Required technical and soft skills
+- Required courses and specializations
+- Eligible graduation years
+- Minimum 10th percentage, if required
+- Minimum 12th percentage, if required
+- Minimum CGPA / percentage
+- Active and historical backlog policy
+- Required experience, if applicable
+- Salary / stipend
+- Bond or service agreement details, if applicable
+- Application opening and closing dates
+- Number of recruitment rounds
+- Description of every recruitment round
+- Interview mode and schedule, when available
+- Documents required
+- Additional instructions
+- Company-specific terms
+
+Show a clear eligibility badge:
+- Eligible
+- Not Eligible
+- Eligibility Review Required
+
+Display the exact reason for ineligibility. For example: “Minimum CGPA required: 7.0; your recorded CGPA: 6.8.”
+
+Do not simply hide ineligible opportunities. Let students see the details while disabling the application action when the rules make them ineligible, unless the placement cell explicitly enables an exception process.
+
+## E. Express interest / Apply
+
+Add a prominent **“I'm Interested — Apply Now”** button.
+
+When a student clicks it:
+
+1. Verify the student is logged in.
+2. Load the latest student profile.
+3. Evaluate the company's eligibility rules on the server.
+4. Check the deadline and whether the opportunity is open.
+5. Check for an existing application.
+6. Display a confirmation screen containing the company name, job title, and relevant terms.
+7. Ask the student to confirm their application.
+8. Save the application in MongoDB.
+9. Display a success notification.
+10. Update the student's application list and the Admin's applicant count.
+
+Collect any additional company-specific application questions, if configured.
+
+The student may optionally add a short statement explaining their interest. Do not make this mandatory unless the Admin requires it.
+
+**Important rules:**
+- One student must not create duplicate applications for the same opportunity.
+- Enforce uniqueness in the database, not just in the UI.
+- Prevent applications after the deadline.
+- Prevent applications to closed or unpublished opportunities.
+- Revalidate eligibility on the backend before accepting the application.
+- Do not silently change a student's submitted application if their profile is edited later.
+- Preserve a snapshot of relevant submitted profile information so the placement cell can audit what was submitted.
+
+After successful application, show:
+- Application ID
+- Company name
+- Job title
+- Date and time applied
+- Current status
+- Recruitment timeline
+
+Allow withdrawal only if the Admin's rules permit it, and record the withdrawal in the audit history.
+
+# 6. Admin / Placement Officer Panel
+
+Build a separate, secure Admin dashboard with its own sidebar and navigation.
+
+The Admin panel is the central control center for college placements.
+
+## A. Admin overview dashboard
+
+Display live statistics:
+- Total registered students
+- Active student accounts
+- Total companies
+- Published job openings
+- Draft and closed openings
+- Total applications
+- Unique applicants
+- Applications received today
+- Eligible applicants
+- Ineligible students who viewed an opportunity
+- Upcoming interviews
+- Shortlisted students
+- Students placed
+- Offers accepted
+- Pending offers
+
+Include charts for:
+- Applications by company
+- Applications by department
+- Applications by graduation year
+- Application status distribution
+- Monthly placement activity
+- Placement conversion rate
+
+All statistics must be calculated from actual database records. Do not hardcode dashboard totals.
+
+Provide filters by academic year, department, company, graduation year, and job status.
+
+## B. Create and manage companies
+
+Add a **“Create Company”** form.
+
+Required and optional fields:
+- Company name
+- Company logo upload
+- Company description
+- Industry
+- Website
+- Headquarters / location
+- Contact person
+- Contact email, with appropriate permissions
+- Contact phone, optional
+- Company registration or reference ID, optional
+- Company status
+- Notes visible only to the placement cell
+
+Admins can:
+- Create a company
+- View company details
+- Edit company information
+- Archive a company
+- View its published and past opportunities
+- View all applications across its opportunities
+
+Do not delete company records that have historical applications. Prefer archiving or soft deletion.
+
+## C. Create and manage job opportunities
+
+Create a complete job-posting form.
+
+### Basic information
+- Select an existing company or create a new one
+- Job title
+- Job category
+- Job description
+- Responsibilities
+- Required skills
+- Job type
+- Work mode
+- Location
+- Salary / stipend range
+- Benefits, if disclosed
+
+### Academic eligibility
+- Eligible courses
+- Eligible branches
+- Eligible specializations
+- Eligible graduation years
+- Minimum 10th percentage
+- Minimum 12th percentage
+- Minimum CGPA / percentage
+- Whether active backlogs are allowed
+- Whether historical backlogs are allowed
+- Maximum permitted backlogs, if applicable
+- Additional institution-specific conditions
+
+### Recruitment process
+- Number of rounds
+- Round names
+- Round type: Aptitude, Coding, Technical Interview, HR Interview, Group Discussion, Assessment, or Custom
+- Round description
+- Round date and time, when scheduled
+- Round duration
+- Location or meeting link, where applicable
+- Instructions for students
+
+### Application settings
+- Opening date
+- Deadline
+- Number of openings, if known
+- Draft / Published / Paused / Closed status
+- Whether students can apply
+- Whether an exception request is allowed
+- Required documents
+- Custom application questions
+- Whether applicant counts are visible to students
+
+### Admin actions
+- Save as draft
+- Preview
+- Publish
+- Edit
+- Duplicate an existing job post
+- Pause applications
+- Close applications
+- Reopen with confirmation and an audit entry
+- Archive completed opportunities
+
+Validate all required fields before publishing.
+
+When an existing job is edited, preserve the previous version or record important changes in the audit log. Notify affected students when significant changes occur.
+
+## D. Company-wise applicant management
+
+This is one of the most important features.
+
+For each company and job opening, create an applicant management page.
+
+At the top, display:
+- Company logo and name
+- Job title
+- Total interested / applied students
+- Eligible applicants
+- Ineligible applicants, if applications were received under an approved exception
+- Shortlisted students
+- Interviewed students
+- Selected students
+- Rejected students
+- Withdrawn applications
+- Application deadline
+
+Below, display a searchable and filterable applicant table.
+
+Columns:
+- Serial number
+- Student name
+- Student ID / roll number
+- Registered email
+- Course
+- Branch
+- Specialization
+- Graduation year
+- Current CGPA / percentage
+- 10th percentage
+- 12th percentage
+- Backlog status
+- Application date
+- Eligibility status
+- Current recruitment stage
+- Application status
+- Resume download link
+- View profile action
+
+Allow the Admin to:
+- Search by name, student ID, or email.
+- Filter by course, specialization, graduation year, CGPA, eligibility, and application status.
+- Sort by name, application date, or CGPA.
+- Open the student's complete profile.
+- Download an individual resume if authorized.
+- Select one or multiple applicants.
+- Change applicant status in bulk.
+- Add internal notes.
+- Export selected records or all filtered records.
+- View a student's application history for that opportunity.
+
+The applicant count must update automatically when applications are submitted or withdrawn.
+
+## E. Download applicants as PDF
+
+Implement a fully functional **“Download Applicant Report (PDF)”** button on each company's applicant management page.
+
+When clicked, the Admin should be able to choose:
+- All applicants
+- Eligible applicants only
+- Shortlisted applicants
+- Selected applicants
+- A manually selected subset
+- Applicants matching the currently applied filters
+
+Generate a professional, downloadable PDF on the server using real database data.
+
+### PDF report layout
+
+**Header**
+- CampusHire OS logo
+- College name
+- Company name and logo, if available
+- Job title
+- Report generation date and time
+- Application deadline
+- Total records included
+
+**Applicant table**
+- Serial number
+- Student name
+- Student ID / roll number
+- Registered email
+- Course
+- Branch / specialization
+- Graduation year
+- CGPA / percentage
+- 10th percentage
+- 12th percentage
+- Application date
+- Eligibility status
+- Current application status
+
+**Footer**
+- Page number and total pages
+- Confidentiality notice
+- Report ID
+- Generated by CampusHire OS
+
+### PDF requirements
+- Use proper A4 page layout.
+- Repeat table headers on subsequent pages.
+- Support long names and large datasets.
+- Wrap long text rather than allowing it to overlap.
+- Handle hundreds or thousands of applicants using pagination or streaming where appropriate.
+- Sanitize input data and handle missing optional fields.
+- Use consistent typography and readable spacing.
+- Do not truncate records silently.
+- Generate the PDF from server-side database queries, not from a manually assembled frontend list.
+- Enforce Admin permissions on the export API.
+- Record export activity in the audit log.
+- Never expose one company's applicant list to an unauthorized student or unrelated company.
+
+The PDF must contain actual student records, not mock data or a screenshot of the dashboard.
+
+Also implement CSV and Excel-compatible CSV export as additional options.
+
+## F. Student management
+
+Create an Admin section to manage all registered students.
+
+Features:
+- View all students.
+- Search by name, email, student ID, or course.
+- Filter by branch, specialization, graduation year, section, CGPA, and backlog status.
+- View complete student profiles.
+- Review profile completion.
+- Activate or deactivate student accounts.
+- Correct verified academic records with an audit trail.
+- Import students through CSV.
+- Download the student directory when authorized.
+- Detect duplicate student IDs and email addresses during imports.
+- Preview and validate an import before saving it.
+- Display an import summary showing successful rows, invalid rows, and duplicate records.
+
+Support bulk operations with clear confirmation dialogs.
+
+Never allow bulk import to overwrite existing student records without an explicit, auditable update mode.
+
+## G. Application and placement management
+
+Create a centralized application-management section where the Admin can see all applications across companies.
+
+Allow authorized placement officers to:
+- View all applications.
+- Filter by company, student, department, year, and status.
+- Change application statuses.
+- Shortlist students.
+- Reject applications with an optional reason.
+- Move students through recruitment rounds.
+- Record interview outcomes.
+- Record offers and acceptance status.
+- Track joining status.
+- Add internal placement notes.
+- Export placement reports.
+
+Suggested application statuses:
+- Applied
+- Under Review
+- Shortlisted
+- Assessment Scheduled
+- Technical Round
+- HR Round
+- Selected
+- Offer Released
+- Offer Accepted
+- Offer Declined
+- Rejected
+- Withdrawn
+
+Keep application status separate from the outcome of each individual recruitment round.
+
+# 7. Eligibility Rules Engine
+
+Build a reusable backend eligibility engine instead of scattering eligibility conditions throughout the frontend.
+
+The engine should evaluate:
+- Course
+- Branch
+- Specialization
+- Graduation year
+- 10th percentage
+- 12th percentage
+- CGPA / percentage
+- Active backlogs
+- Historical backlogs
+- Any additional configured criteria
+
+Return a structured result containing:
+- Eligible / Not Eligible / Review Required
+- Passed conditions
+- Failed conditions
+- Missing student information
+- Human-readable explanation for every result
+
+Use the same backend engine for:
+- Student opportunity eligibility labels
+- Application submission validation
+- Admin applicant filters
+- Eligible applicant counts
+- Eligibility reports
+
+The frontend must not be trusted to determine final eligibility.
+
+Support percentage-based and CGPA-based criteria with explicit, institution-configured rules. Do not assume that CGPA and percentage are directly interchangeable.
+
+If a rule requires missing information, return “Review Required” rather than making up a value.
+
+Allow authorized Admins to configure a documented exception workflow. Any override must record the administrator, reason, timestamp, and previous result.
+
+# 8. Recruitment Timeline and Scheduling
+
+For every job opening, display the complete recruitment timeline.
+
+Example:
+1. Application opens
+2. Application deadline
+3. Online assessment
+4. Technical interview
+5. HR interview
+6. Final result
+7. Offer acceptance deadline
+
+Students should see their personal progress on a timeline.
+
+Admin features:
+- Schedule or edit rounds.
+- Assign students to interview slots.
+- Avoid double-booking a student in conflicting time slots.
+- Publish interview instructions.
+- Record attendance.
+- Notify students of schedule changes.
+- Mark results after each round.
+
+Display times in the configured institution's timezone. Store timestamps consistently in the backend.
+
+# 9. Notifications
+
+Implement an in-app notification center.
+
+Notify students when:
+- A new matching opportunity is published.
+- An application is submitted successfully.
+- Their application status changes.
+- They are shortlisted.
+- A test or interview is scheduled.
+- An interview is rescheduled.
+- The deadline is approaching.
+- An offer is released.
+- A company announcement is published.
+
+Notify Admins when:
+- A new application arrives.
+- An application deadline is approaching.
+- A bulk import finishes.
+- A scheduled recruitment round is approaching.
+- An export is generated.
+- An important administrative action occurs.
+
+Add read/unread states, notification timestamps, and a mark-all-as-read option.
+
+Email notifications should work through a configurable email provider. If credentials are not configured, the application should continue to work with in-app notifications and display a clear setup warning.
+
+Use a reliable background job mechanism if necessary for bulk notifications. Avoid sending duplicate emails when jobs retry.
+
+# 10. Reports and Analytics
+
+Create an Admin analytics page with date and academic-year filters.
+
+Include:
+- Total students registered
+- Total companies participating
+- Published openings
+- Applications received
+- Eligible versus ineligible applications
+- Shortlisting rate
+- Interview conversion rate
+- Offers released
+- Offers accepted
+- Students placed
+- Department-wise placement statistics
+- Company-wise hiring statistics
+- Graduation-year comparison
+- Application trends over time
+
+Define metrics clearly. For example, distinguish total applications from unique students and distinguish offers released from offers accepted.
+
+Provide PDF and CSV export for authorized reports.
+
+All charts and counts must use real API data and respect selected filters.
+
+# 11. Additional Features That Make the Product Stand Out
+
+Implement these features where feasible without compromising the core application.
+
+### A. Student opportunity recommendations
+Recommend openings using academic eligibility, course, specialization, skills, and graduation year.
+
+Keep recommendations explainable, such as: “Recommended because your branch, graduation year, and CGPA meet the requirements.”
+
+### B. Resume management
+Allow students to upload a resume, replace it, and select a current version for applications. Enforce file-size and file-type restrictions.
+
+### C. Profile completeness
+Show students which fields they should complete before applying. Do not block applications solely because an unrelated optional field is empty.
+
+### D. Deadline reminders
+Show reminders for upcoming application deadlines and scheduled interviews.
+
+### E. Bulk job import
+Allow Admins to import job opportunities through a validated CSV template, with a preview before publication.
+
+### F. Audit logs
+Track important administrative events, including:
+- Company creation and edits
+- Job creation, publication, and closure
+- Eligibility rule changes
+- Student record changes
+- Application status changes
+- Eligibility overrides
+- PDF and CSV exports
+- Account activation or deactivation
+
+Each audit entry should include the actor, action, target record, timestamp, and relevant change summary.
+
+Do not put passwords, authentication tokens, or unnecessary personal data in logs.
+
+### G. Admin notes and announcements
+Allow the placement cell to publish announcements for all students, selected departments, or students applying to a particular opportunity.
+
+### H. Calendar view
+Add a calendar displaying deadlines, assessments, interviews, and recruitment events.
+
+### I. Application comparison
+Allow authorized Admins to compare shortlisted applicants using objective fields such as CGPA, skills, and interview-round results. Do not introduce opaque or discriminatory automated ranking.
+
+### J. Data backup and recovery
+Document backup and restoration procedures for MongoDB. Use soft deletion or archival for records that must remain available for audit purposes.
+
+# 12. Optional Gemini AI Features
+
+Use Gemini only for features that genuinely benefit from AI. The core placement workflow must function even when the Gemini API is unavailable.
+
+Possible features:
+- Summarize long job descriptions.
+- Convert a natural-language job description into a suggested structured eligibility form.
+- Explain eligibility rules in simple language.
+- Generate a student-friendly summary of recruitment rounds.
+- Suggest relevant student skills to highlight based on a job description.
+
+Important requirements:
+- Admin must review and approve AI-generated eligibility rules before publication.
+- Never allow AI to silently modify official job requirements.
+- Never use AI to make the final eligibility decision.
+- Use deterministic backend rules for eligibility.
+- Clearly label AI-generated content.
+- Validate AI responses against a schema.
+- Handle API limits, failures, and missing API keys gracefully.
+- Do not send unnecessary student personal data to external AI services.
+- Never expose API keys to the browser.
+
+# 13. MongoDB Database Design
+
+Design a clean, indexed MongoDB schema using Mongoose.
+
+Create models for at least:
+
+1. `User`
+   - email
+   - passwordHash
+   - role
+   - accountStatus
+   - timestamps
+
+2. `StudentProfile`
+   - userId
+   - studentId
+   - personalDetails
+   - contactDetails
+   - academicRecords
+   - course
+   - branch
+   - specialization
+   - graduationYear
+   - semester
+   - section
+   - cgpaOrPercentage
+   - backlogs
+   - profilePhoto
+   - resume
+   - skills
+   - projects
+   - certifications
+   - profileCompletion
+
+3. `Company`
+   - name
+   - logo
+   - description
+   - industry
+   - website
+   - location
+   - contactDetails
+   - status
+   - createdBy
+
+4. `JobOpportunity`
+   - companyId
+   - title
+   - description
+   - responsibilities
+   - skills
+   - jobType
+   - workMode
+   - location
+   - compensation
+   - eligibilityRules
+   - recruitmentRounds
+   - applicationQuestions
+   - openingDate
+   - deadline
+   - openings
+   - status
+   - createdBy
+   - publishedAt
+
+5. `Application`
+   - studentId
+   - jobOpportunityId
+   - companyId
+   - applicationId
+   - submittedProfileSnapshot
+   - answers
+   - eligibilityEvaluation
+   - currentStatus
+   - roundHistory
+   - internalNotes
+   - appliedAt
+   - withdrawnAt
+
+6. `Notification`
+   - recipientId
+   - type
+   - title
+   - message
+   - relatedEntity
+   - readAt
+   - createdAt
+
+7. `InterviewSchedule`
+   - jobOpportunityId
+   - roundId
+   - studentId
+   - startTime
+   - endTime
+   - locationOrMeetingLink
+   - attendance
+   - outcome
+
+8. `AuditLog`
+   - actorId
+   - action
+   - entityType
+   - entityId
+   - changeSummary
+   - timestamp
+
+9. `Announcement`
+   - title
+   - body
+   - audienceRules
+   - createdBy
+   - publishedAt
+
+Add other models only where they improve the design.
+
+### Database integrity requirements
+- Unique index for normalized user email.
+- Unique index for student ID within the applicable institution.
+- Compound unique index on `studentId + jobOpportunityId` to prevent duplicate applications.
+- Index company and opportunity relationships.
+- Index graduation year, branch, and other fields used for common filtering.
+- Validate relationships and prevent unauthorized cross-record access.
+- Use pagination for large lists.
+- Avoid loading all students or applications into memory for every request.
+- Use transactions where supported and necessary for critical multi-document operations.
+- Document index choices and important schema decisions.
+
+# 14. Backend API Requirements
+
+Implement properly organized REST endpoints.
+
+Example route groups:
+
+### Authentication
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+- `POST /api/auth/forgot-password`
+- `POST /api/auth/reset-password`
+
+### Student profile
+- `GET /api/students/me`
+- `PATCH /api/students/me`
+- `POST /api/students/me/photo`
+- `POST /api/students/me/resume`
+- `GET /api/students/me/applications`
+
+### Opportunities
+- `GET /api/opportunities`
+- `GET /api/opportunities/:id`
+- `GET /api/opportunities/:id/eligibility`
+- `POST /api/opportunities/:id/apply`
+- `POST /api/applications/:id/withdraw`
+
+### Admin companies
+- `POST /api/admin/companies`
+- `GET /api/admin/companies`
+- `GET /api/admin/companies/:id`
+- `PATCH /api/admin/companies/:id`
+- `PATCH /api/admin/companies/:id/archive`
+
+### Admin opportunities
+- `POST /api/admin/opportunities`
+- `GET /api/admin/opportunities`
+- `PATCH /api/admin/opportunities/:id`
+- `POST /api/admin/opportunities/:id/publish`
+- `POST /api/admin/opportunities/:id/close`
+
+### Applicants and exports
+- `GET /api/admin/opportunities/:id/applicants`
+- `PATCH /api/admin/applications/:id/status`
+- `POST /api/admin/applications/bulk-status`
+- `GET /api/admin/opportunities/:id/applicants/export.pdf`
+- `GET /api/admin/opportunities/:id/applicants/export.csv`
+
+### Student management
+- `GET /api/admin/students`
+- `GET /api/admin/students/:id`
+- `PATCH /api/admin/students/:id`
+- `POST /api/admin/students/import/preview`
+- `POST /api/admin/students/import/commit`
+
+### Dashboard and analytics
+- `GET /api/admin/dashboard/stats`
+- `GET /api/admin/analytics/placements`
+- `GET /api/admin/analytics/applications`
+
+### Notifications and scheduling
+- `GET /api/notifications`
+- `PATCH /api/notifications/:id/read`
+- `POST /api/admin/interviews`
+- `PATCH /api/admin/interviews/:id`
+- `GET /api/student/interviews`
+
+These are suggested route names; organize them consistently and add the necessary endpoints.
+
+Every endpoint must have:
+- Authentication where required
+- Role authorization
+- Input validation
+- Consistent response formats
+- Appropriate HTTP status codes
+- Pagination where appropriate
+- Error handling
+- Logging that avoids secrets and sensitive data
+
+Do not return the entire student record to endpoints that need only a few fields.
+
+# 15. Security and Privacy
+
+Treat student information as confidential.
+
+Implement:
+- Role-based access control
+- Secure password hashing
+- Secure cookie settings where applicable
+- CSRF protection where required by the authentication design
+- Rate limiting for login and sensitive endpoints
+- Server-side input validation
+- Protection against NoSQL injection
+- File upload validation
+- Restricted PDF and resume downloads
+- Safe error messages
+- Secure CORS configuration
+- Security headers
+- Environment-variable management
+- Audit logging
+- Account deactivation handling
+
+Students can view and edit only their own profiles, except for explicitly authorized administrative operations.
+
+Students must not access other students' private information or applicant reports. Admin permissions should be restricted to authorized placement staff.
+
+If the system supports multiple colleges, scope every relevant query and authorization rule to the correct institution. Never rely on a frontend-supplied institution ID as proof of authorization.
+
+Add a clear privacy notice and data-retention guidance suitable for a college deployment.
+
+# 16. Demo Data and Initial Setup
+
+The application must run with realistic sample data.
+
+Create a seed script that generates:
+- 1 demo Admin account
+- 100 demo student profiles
+- 10–15 sample companies
+- At least 20 job opportunities
+- A variety of eligibility requirements
+- Sample applications with different statuses
+- Upcoming and past recruitment rounds
+- Notifications and audit events
+
+Include varied branches, specializations, graduation years, CGPAs, percentages, and backlog statuses so filtering and eligibility evaluation can be tested properly.
+
+Seed data should be clearly labeled as demonstration data. Do not use real students' personal information.
+
+Provide demo credentials in the README for local development only. Force a password change or clearly restrict demo credentials to non-production use. Never deploy a public production Admin account with a known password.
+
+# 17. Testing Requirements
+
+Write meaningful tests for the important workflows.
+
+### Eligibility tests
+- Student satisfies all rules.
+- Student fails minimum CGPA.
+- Student fails 10th or 12th percentage criteria.
+- Student has an ineligible graduation year.
+- Student has a disallowed active backlog.
+- Student is missing required information.
+- Admin overrides eligibility with a recorded reason.
+
+### Application tests
+- Eligible student applies successfully.
+- Duplicate application is rejected.
+- Application after the deadline is rejected.
+- Application to a closed job is rejected.
+- Ineligible student cannot bypass backend validation.
+- Profile changes do not overwrite the submitted profile snapshot.
+
+### Authorization tests
+- Student cannot access Admin APIs.
+- Student cannot download another student's private resume.
+- Student cannot export applicant reports.
+- Admin can download a report for an authorized opportunity.
+- Users cannot access data from another institution if multi-college support is enabled.
+
+### PDF tests
+- Correct company and job title appear.
+- Correct applicant count is included.
+- Filters affect the exported records.
+- Large reports are generated correctly.
+- Unauthorized export requests are rejected.
+
+Also include basic integration tests for registration, login, job publication, application submission, status updates, and CSV import.
+
+# 18. Required Pages and Navigation
+
+### Public
+- `/`
+- `/login`
+- `/register`
+- `/forgot-password`
+
+### Student
+- `/student/dashboard`
+- `/student/profile`
+- `/student/opportunities`
+- `/student/opportunities/:id`
+- `/student/applications`
+- `/student/applications/:id`
+- `/student/interviews`
+- `/student/notifications`
+- `/student/settings`
+
+### Admin
+- `/admin/dashboard`
+- `/admin/companies`
+- `/admin/companies/new`
+- `/admin/companies/:id`
+- `/admin/opportunities`
+- `/admin/opportunities/new`
+- `/admin/opportunities/:id`
+- `/admin/opportunities/:id/applicants`
+- `/admin/students`
+- `/admin/students/:id`
+- `/admin/applications`
+- `/admin/interviews`
+- `/admin/announcements`
+- `/admin/analytics`
+- `/admin/audit-logs`
+- `/admin/settings`
+
+Use route guards and server authorization. Hiding a menu item in the frontend is not sufficient security.
+
+# 19. Development and Deployment
+
+Organize the project cleanly, for example:
+
+- `client/`
+- `server/`
+- `shared/`, if useful
+- `README.md`
+- `.env.example`
+
+Requirements:
+- Clear separation of frontend, backend, models, controllers, services, validators, middleware, and routes.
+- Reusable UI components.
+- Centralized error handling.
+- Reusable API client.
+- Loading, empty, error, and success states.
+- Database connection handling.
+- Structured server logs.
+- Seed and migration or data-maintenance scripts as appropriate.
+- Production build configuration.
+- Health-check endpoint.
+- Deployment instructions for the frontend and backend.
+- MongoDB Atlas setup guide.
+- Cloudinary setup guide.
+- Email provider configuration guide.
+- Instructions for configuring optional Gemini functionality.
+
+Never claim an integration works unless it has actually been implemented and configured.
+
+# 20. Implementation Order
+
+Build the application in phases, but keep the architecture consistent.
+
+**Phase 1 — Foundation**
+- Project structure
+- Branding and shared UI
+- Database connection
+- Authentication
+- Admin and Student roles
+- Student registration and profiles
+
+**Phase 2 — Company and opportunity management**
+- Company CRUD
+- Job creation and publishing
+- Job detail pages
+- Search, filters, and pagination
+- Eligibility rules engine
+
+**Phase 3 — Applications**
+- Express interest / Apply Now
+- Duplicate prevention
+- Application history
+- Admin applicant management
+- Bulk status updates
+
+**Phase 4 — Reporting**
+- Real dashboard metrics
+- PDF applicant reports
+- CSV exports
+- Student management and imports
+- Audit logs
+
+**Phase 5 — Placement workflow**
+- Recruitment rounds
+- Interview scheduling
+- Notifications
+- Offers and placement tracking
+
+**Phase 6 — Quality and enhancements**
+- Calendar
+- Recommendations
+- Optional Gemini tools
+- Tests
+- Accessibility
+- Security hardening
+- Deployment and documentation
+
+Do not generate only the frontend and claim the project is complete. Implement the actual backend and database workflows.
+
+# 21. Acceptance Criteria
+
+The project is complete only when these end-to-end flows work:
+
+1. A student registers and logs in.
+2. The student completes and edits their profile.
+3. An Admin logs in and creates a company.
+4. The Admin publishes a job with detailed eligibility rules and recruitment rounds.
+5. The job appears in the Student panel.
+6. A student opens the job and sees all company and job details.
+7. The eligibility engine explains whether the student qualifies.
+8. An eligible student applies successfully.
+9. A duplicate application is prevented.
+10. The application appears in the Admin's company-wise applicant table.
+11. The Admin can search, filter, and shortlist applicants.
+12. The Admin downloads a working PDF containing the correct student names, email addresses, student IDs, company name, and other selected fields.
+13. The Admin can export the same filtered set to CSV.
+14. A status change is reflected in the Student panel.
+15. Students receive relevant notifications.
+16. Recruitment rounds and interview schedules are visible to the relevant users.
+17. Dashboard analytics update from real database data.
+18. Unauthorized users cannot access private student data or Admin endpoints.
+19. The application works on desktop, tablet, and mobile.
+20. The README explains how to run, test, seed, configure, and deploy the application.
+
+# Final Instructions
+
+Start by producing a concise implementation plan, a proposed folder structure, the MongoDB schema design, and the main API contracts.
+
+Then implement the project in small, testable steps. Create complete working files rather than scattered snippets or pseudocode. After each major phase, verify the main workflow and fix errors before moving on.
+
+If an external service is not configured, provide a clear setup path and a useful local development fallback.
+
+Prioritize these three outcomes above everything else:
+
+1. **A genuinely usable Admin panel for companies, jobs, students, and company-wise applicants.**
+2. **A polished Student panel with complete profiles, searchable opportunities, eligibility checking, and applications.**
+3. **A secure, reliable PDF export that downloads real applicant data for the selected company and job.**
+
+The final result should be credible as a real placement-cell product, suitable for a final-year engineering project, portfolio demonstration, technical interviews, and a potential pilot with a college placement team.
